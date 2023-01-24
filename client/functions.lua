@@ -86,27 +86,20 @@ RegisterNUICallback('getNotifyConfig', function(_, cb)
 end)
 
 function QBCore.Functions.Notify(text, texttype, length)
+    notifyType = texttype or 'primary'
+	length = length or 5000
+	if notifyType == 'primary'
+	or notifyType == 'police'
+	or notifyType == 'ambulance' then
+		notifyType = 'info'
+	end
     if type(text) == "table" then
-        local ttext = text.text or 'Placeholder'
-        local caption = text.caption or 'Placeholder'
-        texttype = texttype or 'primary'
-        length = length or 5000
-        SendNUIMessage({
-            action = 'notify',
-            type = texttype,
-            length = length,
-            text = ttext,
-            caption = caption
-        })
+        local ttext = text.text or 'แจ้งเตือน'
+        local caption = text.caption or '-'
+        exports['notify']:Notify(notifyType, ttext, caption, length, 'right')
     else
-        texttype = texttype or 'primary'
-        length = length or 5000
-        SendNUIMessage({
-            action = 'notify',
-            type = texttype,
-            length = length,
-            text = text
-        })
+		local caption = text or '-'
+        exports['notify']:Notify(notifyType, "แจ้งเตือน", caption, length, 'right')
     end
 end
 
